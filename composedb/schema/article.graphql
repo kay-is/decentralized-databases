@@ -1,0 +1,19 @@
+type Profile
+  @loadModel(
+    id: "kjzl6hvfrbw6c8ygqq93wzdxwmtjgdab02r8qp8fhvni1j50o80o4s16vn6qaet"
+  ) {
+  id: ID!
+}
+
+type Article
+  @createModel(
+    accountRelation: LIST
+    description: "Text written by an author"
+  ) {
+  author: DID! @documentAccount
+  title: String! @string(maxLength: 50)
+  date: DateTime!
+  coverImage: URI
+  content: String! @string(maxLength: 100000)
+  profileId: StreamID! @documentReference(model: "Profile")
+}

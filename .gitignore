@@ -1,0 +1,6 @@
+.vscode
+node_modules
+composedb/composites
+composedb/admin-key
+composedb/blog-composites.js
+composedb/daemon.config.json

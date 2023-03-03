@@ -1,0 +1,26 @@
+{
+  "name": "composedb-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "setup:account": "node scripts/setup-account",
+    "setup:schema": "node scripts/setup-schema",
+    "start:ceramic": "ceramic daemon --config=daemon.config.json",
+    "start:graphql": "composedb graphql:server --graphiql composites/blog.runtime.json --ceramic-url=http://0.0.0.0:7007 --did-private-key=$(cat admin-key) --port=5005"
+  },
+  "author": "Kay Plößer",
+  "license": "GPL3",
+  "devDependencies": {
+    "@ceramicnetwork/cli": "^2.28.0",
+    "@ceramicnetwork/http-client": "^2.20.0",
+    "@composedb/cli": "^0.4.3",
+    "@composedb/devtools": "^0.4.3",
+    "@composedb/devtools-node": "^0.4.3",
+    "dids": "^4.0.0",
+    "key-did-provider-ed25519": "^3.0.0",
+    "key-did-resolver": "^3.0.0",
+    "uint8arrays": "^4.0.3"
+  }
+}
