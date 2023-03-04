@@ -1,7 +1,4 @@
-type Profile
-  @loadModel(
-    id: "kjzl6hvfrbw6c8ygqq93wzdxwmtjgdab02r8qp8fhvni1j50o80o4s16vn6qaet"
-  ) {
+type Profile @loadModel(id: "$PROFILE_ID") {
   id: ID!
 }
 

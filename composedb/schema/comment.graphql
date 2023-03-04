@@ -1,7 +1,4 @@
-type Article
-  @loadModel(
-    id: "kjzl6hvfrbw6c8ygqq93wzdxwmtjgdab02r8qp8fhvni1j50o80o4s16vn6qaet"
-  ) {
+type Article @loadModel(id: "$ARTICLE_ID") {
   id: ID!
 }
 

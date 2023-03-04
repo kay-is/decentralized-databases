@@ -25,11 +25,34 @@ await did.authenticate()
 const ceramic = new CeramicClient("http://127.0.0.1:7007")
 ceramic.did = did
 
-const composites = await Promise.all(
-  readdirSync("schema").map((f) => createComposite(ceramic, `schema/${f}`))
+const profileComposite = await createComposite(
+  ceramic,
+  "schema/profile.graphql"
 )
 
-const composite = Composite.from(composites)
+const articleSchema = readFileSync("schema/article.graphql", {
+  encoding: "utf-8",
+}).replace("$PROFILE_ID", profileComposite.modelIDs[0])
+
+const articleComposite = await Composite.create({
+  ceramic,
+  schema: articleSchema,
+})
+
+const commentSchema = readFileSync("schema/comment.graphql", {
+  encoding: "utf-8",
+}).replace("$ARTICLE_ID", articleComposite.modelIDs[0])
+
+const commentComposite = await Composite.create({
+  ceramic,
+  schema: commentSchema,
+})
+
+const composite = Composite.from([
+  profileComposite,
+  articleComposite,
+  commentComposite,
+])
 
 await writeEncodedComposite(composite, "composites/blog.json")
 await composite.startIndexingOn(ceramic)
