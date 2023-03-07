@@ -1,9 +1,25 @@
 import Head from "next/head"
-import { init, loadProfile } from "@/utils/database"
+import {
+  loadSession,
+  createProfile,
+  loadProfile,
+  logout,
+} from "@/utils/database"
 
 export default function Home() {
-  function initDatabase() {
-    init()
+  function loginToDb() {
+    loadSession()
+  }
+
+  function logoutFromDb() {
+    logout()
+  }
+
+  function create() {
+    createProfile({ name: "Kay", bio: "I am a technical writer!" })
+  }
+
+  function load() {
     loadProfile()
   }
 
@@ -13,7 +29,11 @@ export default function Home() {
         <title>ComposeDB Blog</title>
       </Head>
       <h1>ComposeDB Blog</h1>
-      <button onClick={initDatabase}>Init Database</button>
+      <button onClick={loginToDb}>login</button>
+      <button onClick={logoutFromDb}>logout</button>
+      <hr></hr>
+      <button onClick={create}>create</button>
+      <button onClick={load}>load</button>
     </>
   )
 }
