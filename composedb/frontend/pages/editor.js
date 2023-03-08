@@ -17,9 +17,12 @@ export default function EditorPage() {
     if (articleId) {
       await databaseClient.updateArticle(article)
     } else {
+      const profile = await databaseClient.readOwnProfile()
+
       await databaseClient.createArticle({
         ...article,
         date: new Date().toISOString(),
+        profileId: profile.id,
       })
     }
 

@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "setup:account": "node scripts/setup-account",
-    "setup:schema": "node scripts/setup-schema",
-    "start:ceramic": "ceramic daemon --config=daemon.config.json",
-    "start:graphql": "composedb graphql:server --graphiql composites/blog.runtime.json --ceramic-url=http://0.0.0.0:7007 --did-private-key=$(cat admin-key) --port=5005"
+    "account": "node scripts/setup-account",
+    "schema": "node scripts/setup-schema",
+    "ceramic": "ceramic daemon --config=daemon.config.json",
+    "graphql": "composedb graphql:server --graphiql composites/blog.runtime.json --ceramic-url=http://0.0.0.0:7007 --did-private-key=$(cat admin-key) --port=5005"
   },
   "author": "Kay Plößer",
   "license": "GPL3",

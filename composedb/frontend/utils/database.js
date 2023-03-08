@@ -29,10 +29,7 @@ export class DatabaseClient {
   restoreSession = async () => {
     console.log("Restoring session...")
     const sessionStr = localStorage.getItem("didsession")
-    if (!sessionStr) {
-      console.log("No session found!")
-      return false
-    }
+    if (!sessionStr) return console.log("No session found!")
 
     this.#session = await DIDSession.fromSession(sessionStr)
     this.#compose = new ComposeClient({
@@ -43,15 +40,11 @@ export class DatabaseClient {
 
     this.#compose.setDID(this.#session.did)
     console.log("Session restored!")
-    return true
   }
 
   loadSession = async () => {
     console.log("Checking active session...")
-    if (this.sessionActive()) {
-      console.log("Active session found!")
-      return
-    }
+    if (this.sessionActive()) return console.log("Active session found!")
 
     console.log("No active session found! Loading from localstorage...")
 
@@ -102,8 +95,6 @@ export class DatabaseClient {
   }
 
   createArticle = async (newArticle) => {
-    const content = { ...newArticle }
-
     const data = await this.#query(
       `
       mutation CreateArticle($i: CreateArticleInput!) {
@@ -112,7 +103,7 @@ export class DatabaseClient {
         }
       }
       `,
-      { i: { content } }
+      { i: { content: newArticle } }
     )
 
     return data?.createArticle?.document
@@ -196,11 +187,7 @@ export class DatabaseClient {
         viewer {
           articleList(last: 10) {
             edges {
-              node {
-                id
-                title
-                date
-              }
+              node { id title date }
             }
           }
         }
@@ -209,6 +196,29 @@ export class DatabaseClient {
     )
 
     return data?.viewer?.articleList?.edges?.map((i) => i?.node)
+  }
+
+  listUserArticles = async (id) => {
+    const data = await this.#query(
+      `
+      query ($id: ID!){
+        node(id: $id) {
+          ... on Profile {
+            author {
+              articleList(first: 10) {
+                edges {
+                  node { id title date }
+                }
+              }
+            }
+          }
+        }
+      }
+      `,
+      { id }
+    )
+
+    return data?.node?.author?.articleList?.edges?.map((i) => i?.node)
   }
 
   createProfile = async (profile) => {
@@ -246,11 +256,7 @@ export class DatabaseClient {
       `
       query ($id: ID!) {
         node(id: $id) {
-          ... on Profile {
-            id
-            name
-            bio
-          }
+          ... on Profile { id name bio }
         }
       }
       `,
@@ -265,11 +271,7 @@ export class DatabaseClient {
       `
       {
         viewer {
-          profile {
-            id
-            name
-            bio
-          }
+          profile { id name bio }
         }
       }
       `
@@ -310,6 +312,7 @@ export class DatabaseClient {
                     content
                     author {
                       profile {
+                        id
                         name
                       }
                     }

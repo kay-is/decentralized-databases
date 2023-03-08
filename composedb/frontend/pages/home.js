@@ -25,22 +25,28 @@ export default function HomePage() {
   return (
     <>
       <h1>Home</h1>
+      <Link href="/">Landing Page</Link>|
       <button onClick={logout}>Logout</button>
+      <hr />
       <h2>{profile.name}</h2>
       <p>{profile.bio}</p>
       <Link href="/editor">Create Article</Link>
+      <hr />
       <h2>Your Articles</h2>
-      {articles.length == 0 && <p>No articles found.</p>}
-      <ul>
-        {articles.map((a) => (
-          <li>
-            <Link href={"article?id=" + a.id}>
-              <h3>{a.title}</h3>
-            </Link>
-            <p>Created at {a.date}</p>
-          </li>
-        ))}
-      </ul>
+      {articles.length == 0 ? (
+        <p>No articles found.</p>
+      ) : (
+        <ul>
+          {articles.map((article) => (
+            <li key={article.id}>
+              <Link href={"article?id=" + article.id}>
+                <h3>{article.title}</h3>
+              </Link>
+              <p>Created at {article.date}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   )
 }

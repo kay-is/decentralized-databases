@@ -5,7 +5,15 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <body>
-        <Main />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Main />
+        </div>
         <NextScript />
       </body>
     </Html>
