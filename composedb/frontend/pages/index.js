@@ -1,39 +1,51 @@
-import Head from "next/head"
-import {
-  loadSession,
-  createProfile,
-  loadProfile,
-  logout,
-} from "@/utils/database"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+import { useDatabaseClient } from "@/utils/database.context"
+import { useRouter } from "next/router"
 
-export default function Home() {
-  function loginToDb() {
-    loadSession()
-  }
+export default function LandingPage() {
+  const router = useRouter()
+  const databaseClient = useDatabaseClient()
+  const [articles, setArticles] = useState([])
 
-  function logoutFromDb() {
-    logout()
-  }
+  useEffect(() => {
+    databaseClient.listArticles().then(setArticles)
+  }, [databaseClient])
 
-  function create() {
-    createProfile({ name: "Kay", bio: "I am a technical writer!" })
-  }
+  const loginOrSignUp = async () => {
+    await databaseClient.loadSession()
 
-  function load() {
-    loadProfile()
+    const profile = await databaseClient.readOwnProfile()
+
+    if (!profile) {
+      const name = prompt("You don't have a profile!\nPlease enter your name:")
+      await databaseClient.createProfile({ name, bio: "I'm a new user!" })
+    }
+
+    router.push("/home")
   }
 
   return (
     <>
-      <Head>
-        <title>ComposeDB Blog</title>
-      </Head>
       <h1>ComposeDB Blog</h1>
-      <button onClick={loginToDb}>login</button>
-      <button onClick={logoutFromDb}>logout</button>
-      <hr></hr>
-      <button onClick={create}>create</button>
-      <button onClick={load}>load</button>
+
+      <button onClick={loginOrSignUp}>Login/Signup</button>
+
+      <hr />
+
+      {articles.length == 0 && <p>No articles found.</p>}
+
+      {articles.map((a) => (
+        <div key={a.id}>
+          <Link href={"/article?id=" + a.id}>
+            <h2>{a.title}</h2>
+          </Link>
+          <p>
+            Created on {a.date} by {a.author.profile.name}.
+          </p>
+          <p>{a.content}</p>
+        </div>
+      ))}
     </>
   )
 }

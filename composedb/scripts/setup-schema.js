@@ -1,5 +1,5 @@
 import { execSync } from "child_process"
-import { readFileSync, readdirSync } from "fs"
+import { readFileSync } from "fs"
 import { CeramicClient } from "@ceramicnetwork/http-client"
 import { DID } from "dids"
 import { Ed25519Provider } from "key-did-provider-ed25519"
@@ -41,17 +41,29 @@ const articleComposite = await Composite.create({
 
 const commentSchema = readFileSync("schema/comment.graphql", {
   encoding: "utf-8",
-}).replace("$ARTICLE_ID", articleComposite.modelIDs[0])
+}).replace("$ARTICLE_ID", articleComposite.modelIDs[1])
 
 const commentComposite = await Composite.create({
   ceramic,
   schema: commentSchema,
 })
 
+const articleCommentSchema = readFileSync("schema/article.comment.graphql", {
+  encoding: "utf-8",
+})
+  .replace("$ARTICLE_ID", articleComposite.modelIDs[1])
+  .replace("$COMMENT_ID", commentComposite.modelIDs[1])
+
+const articleCommentComposite = await Composite.create({
+  ceramic,
+  schema: articleCommentSchema,
+})
+
 const composite = Composite.from([
   profileComposite,
   articleComposite,
   commentComposite,
+  articleCommentComposite,
 ])
 
 await writeEncodedComposite(composite, "composites/blog.json")

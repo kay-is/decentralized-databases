@@ -3,5 +3,4 @@ type Profile
   author: DID! @documentAccount
   name: String! @string(minLength: 3, maxLength: 50)
   bio: String @string(maxLength: 100000)
-  image: URI
 }
