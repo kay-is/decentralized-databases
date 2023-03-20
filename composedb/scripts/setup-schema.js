@@ -12,7 +12,7 @@ import {
 } from "@composedb/devtools-node"
 
 const privateKey = fromString(
-  readFileSync("admin-key", { encoding: "utf-8" }).trim(),
+  readFileSync("account/admin-key", { encoding: "utf-8" }).trim(),
   "base16"
 )
 
