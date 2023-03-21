@@ -1,5 +1,5 @@
 # Decentralized Databases
 
-- [ComposeDB](/composedb/README.md)
+- [ComposeDB](/composedb)
 
 More to come...
